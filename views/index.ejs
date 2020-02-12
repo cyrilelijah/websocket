@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" name="" id="message">
+    <button type="button" id="submit_btn">Submit</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:8080');
+
+        var message = document.getElementById('message');
+        var submit_btn = document.getElementById('submit_btn');
+
+        submit_btn.addEventListener('click', function (event) {
+            socket.emit('message', { //send to server
+                message: message.value
+            });
+        });
+
+        message.addEventListener('keyup', function (event) {
+            socket.emit('typing', {
+                typing: message.value
+            });
+        });
+
+        //listen from server
+        socket.on('message', function (data) {
+            console.log(data);
+        });
+
+        socket.on('typing', function(data) {
+            console.log(data);
+        });
+
+    </script>
+</body>
+
+</html>
